@@ -60,5 +60,6 @@ public class BookPlaceOrder {
 		Thread.sleep(5000);
 		String successMessage = driver.findElement(By.cssSelector(".woocommerce-thankyou-order-received")).getText();
 		Assert.assertEquals(successMessage, "Thank you. Your order has been received.");
+		driver.quit();
 	}
 }
