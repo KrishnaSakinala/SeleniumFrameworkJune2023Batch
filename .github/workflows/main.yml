@@ -57,9 +57,13 @@ jobs:
         if: inputs.testng_file != null
         run: mvn clean test -DtestType=${{ inputs.testng_file }} && echo "Tests passed" || (echo "Tests failed"; exit 1)
 
+  archive_report:
+    runs-on: ubuntu-latest
+    needs: [run_tests]
+
+    steps:
       - name: Archive report
         uses: actions/upload-artifact@v2
         with:
           name: extent-report
           path: reports/automationreport.html
-          if: always()
