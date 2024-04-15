@@ -16,7 +16,7 @@ jobs:
   run_tests:
     runs-on: ubuntu-latest
     outputs:
-      job_status: ${{ steps.set_job_status.outputs.job_status }}
+      job_status: ${{ steps.run_tests.outputs.job_status }}
 
     steps:    
 
@@ -67,6 +67,7 @@ jobs:
             echo "::set-output name=job_status::failure"
             exit $test_exit_code
           else
+            echo "Tests passed"
             echo "::set-output name=job_status::success"
           fi
         continue-on-error: true
