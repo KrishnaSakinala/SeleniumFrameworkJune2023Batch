@@ -15,8 +15,6 @@ on:
 jobs:
   run_tests:
     runs-on: ubuntu-latest
-    outputs:
-      job_status: ${{ steps.run_tests.outputs.job_status }}
 
     steps:    
 
@@ -57,29 +55,11 @@ jobs:
 
       - name: Run TestNG XML file
         if: inputs.testng_file != null
-        id: run_tests
-        run: |
-          mvn clean test -DtestType=${{ inputs.testng_file }}
-          test_exit_code=$?
-          echo "Test exit code: $test_exit_code"
-          if [ $test_exit_code -ne 0 ]; then
-            echo "Tests failed"
-            echo "::set-output name=job_status::failure"
-            exit $test_exit_code
-          else
-            echo "Tests passed"
-            echo "::set-output name=job_status::success"
-          fi
-        continue-on-error: true
-
-      - name: Debug job status
-        run: |
-          echo "Job status: ${{ steps.run_tests.outputs.job_status }}"
-        if: always()
+        run: mvn clean test -DtestType=${{ inputs.testng_file }} && echo "Tests passed" || (echo "Tests failed"; exit 1)
 
       - name: Archive report
-        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: extent-report
           path: reports/automationreport.html
+          if: always()
