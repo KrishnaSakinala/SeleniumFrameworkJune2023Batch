@@ -28,6 +28,20 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+          
+      - name: Cache Selenoid binary
+        uses: actions/cache@v2
+        with:
+          path: ~/.aerokube/selenoid
+          key: ${{ runner.os }}-selenoid
+          restore-keys: ${{ runner.os }}-selenoid
           
       - name: Start Selenoid server
         uses: n-ton4/selenoid-github-action@master
