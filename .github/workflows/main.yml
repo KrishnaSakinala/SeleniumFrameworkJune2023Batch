@@ -61,6 +61,7 @@ jobs:
         run: |
           mvn clean test -DtestType=${{ inputs.testng_file }}
           test_exit_code=$?
+          echo "Test exit code: $test_exit_code"
           if [ $test_exit_code -ne 0 ]; then
             echo "Tests failed"
             echo "::set-output name=job_status::failure"
@@ -69,6 +70,11 @@ jobs:
             echo "::set-output name=job_status::success"
           fi
         continue-on-error: true
+
+      - name: Debug job status
+        run: |
+          echo "Job status: ${{ steps.run_tests.outputs.job_status }}"
+        if: always()
 
       - name: Archive report
         if: always()
