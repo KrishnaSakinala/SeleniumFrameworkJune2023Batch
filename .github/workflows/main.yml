@@ -62,13 +62,21 @@ jobs:
     needs: [run_tests]
 
     steps:
-      - name: Check if report exists
-        run: test -f reports/automationreport.html
-        continue-on-error: true
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Archive report
-        if: always()
+        run: |
+          if [ -f reports/automationreport.html ]; then
+            echo "Archiving report..."
+            mv reports/automationreport.html automationreport.html
+            echo "::set-output name=report_path::automationreport.html"
+          else
+            echo "Report not found."
+          fi
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: extent-report
-          path: reports/automationreport.html
+          path: automationreport.html
