@@ -62,3 +62,4 @@ jobs:
         with:
           name: extent-report
           path: reports/automationreport.html
+          if: always()
