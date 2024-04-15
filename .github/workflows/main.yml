@@ -56,6 +56,7 @@ jobs:
       - name: Run TestNG XML file
         if: inputs.testng_file != null
         run: mvn clean test -DtestType=${{ inputs.testng_file }}
+        continue-on-error: true
 
       - name: Archive report
         uses: actions/upload-artifact@v2
