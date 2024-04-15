@@ -62,7 +62,12 @@ jobs:
     needs: [run_tests]
 
     steps:
+      - name: Check if report exists
+        run: test -f reports/automationreport.html
+        continue-on-error: true
+
       - name: Archive report
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: extent-report
